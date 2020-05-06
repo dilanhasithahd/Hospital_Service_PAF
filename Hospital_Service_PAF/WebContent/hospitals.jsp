@@ -2,40 +2,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     
-   <%
-   if (request.getParameter("hosName") != null)
-   {
-    Hospital itemObj = new Hospital();
-    String stsMsg = "";
-   
-   if (request.getParameter("hidHosIDSave") == "")
-    {
-    stsMsg = itemObj.AddHospitals(request.getParameter("hosName"),
-    request.getParameter("hosAddress"),
-    request.getParameter("hosEmail"),
-    request.getParameter("hosPhone"),
-    request.getParameter("hosCharge"));
-    }
-   else
-    {
-    stsMsg = itemObj.updateHospital(request.getParameter("hidHosIDSave"),
-    request.getParameter("hosName"),
-    request.getParameter("hosAddress"),
-    request.getParameter("hosEmail"),
-    request.getParameter("hosPhone"),
-    request.getParameter("hosCharge"));
-    }
-    session.setAttribute("statusMsg", stsMsg);
-   } 
-   
-   if (request.getParameter("hidHosIDDelete") != null)
-   {
-	Hospital hosObj = new Hospital();
-    String stsMsg =
-    hosObj.removeHospitals(request.getParameter("hidHosIDDelete"));
-    session.setAttribute("statusMsg", stsMsg);
-   }
-   %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -69,7 +35,6 @@
 				</form>
 				<br>
 				<div id="alertSuccess" class="alert alert-success">
-					<% out.print(session.getAttribute("statusMsg")); %>
 				</div>
 				<div id="alertError" class="alert alert-danger"></div>
 				<br>

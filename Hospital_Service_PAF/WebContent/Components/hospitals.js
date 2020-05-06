@@ -23,8 +23,88 @@ $(document).on("click", "#btnSave", function(event)
 		 return;
 		 }
 		// If valid------------------------
-		 $("#formHospital").submit();
+		var type = ($("#hidHosIDSave").val() == "") ? "POST" : "PUT";
+		
+		$.ajax(
+				{
+				 url : "HospitalsAPI",
+				 type : type,
+				 data : $("#formHospital").serialize(),
+				 dataType : "text",
+				 complete : function(response, status)
+				 {
+				 onHospitalSaveComplete(response.responseText, status);
+				 }
+				});
 }); 
+
+function onHospitalSaveComplete(response, status)
+{
+	var resultSet = JSON.parse(response);
+	if (resultSet.status.trim() == "success")
+	{
+	 $("#alertSuccess").text("Successfully saved.");
+	 $("#alertSuccess").show();
+	$("#divItemsGrid").html(resultSet.data);
+	} else if (resultSet.status.trim() == "error")
+	{
+	 $("#alertError").text(resultSet.data);
+	 $("#alertError").show();
+	}
+	else if (status == "error")
+	{
+	 $("#alertError").text("Error while saving.");
+	 $("#alertError").show();
+	} else
+	{
+	 $("#alertError").text("Unknown error while saving..");
+	 $("#alertError").show();
+	}
+	
+	$("#hidItemIDSave").val("");
+	$("#formItem")[0].reset();
+
+}
+
+$(document).on("click", ".btnRemove", function(event)
+		{
+		 $.ajax(
+		 {
+		 url : "HospitalsAPI",
+		 type : "DELETE",
+		 data : "hosID=" + $(this).data("itemid"),
+		 dataType : "text",
+		 complete : function(response, status)
+		 {
+		 onItemDeleteComplete(response.responseText, status);
+		 }
+		 });
+});
+
+function onItemDeleteComplete(response, status)
+{
+	if (status == "success")
+	 {
+		 var resultSet = JSON.parse(response);
+		 if (resultSet.status.trim() == "success")
+		 {
+		 $("#alertSuccess").text("Successfully deleted.");
+		 $("#alertSuccess").show();
+		 $("#divItemsGrid").html(resultSet.data);
+		 } else if (resultSet.status.trim() == "error"){
+		 $("#alertError").text(resultSet.data);
+		 $("#alertError").show();
+		 }
+	 } 
+	else if (status == "error"){
+		 $("#alertError").text("Error while deleting.");
+		 $("#alertError").show();
+	 } 
+	else{
+		 $("#alertError").text("Unknown error while deleting..");
+		 $("#alertError").show();
+	 }
+}
 
 function validateItemForm()
 {
@@ -64,13 +144,13 @@ return true;
 }
 
 $(document).on("click", ".btnUpdate", function(event)
-		{
+{
 			 $("#hidHosIDSave").val($(this).closest("tr").find('#hidHosIDUpdate').val());
 			 $("#hosName").val($(this).closest("tr").find('td:eq(1)').text());
 			 $("#hosAddress").val($(this).closest("tr").find('td:eq(2)').text());
 			 $("#hosEmail").val($(this).closest("tr").find('td:eq(3)').text());
 			 $("#hosPhone").val($(this).closest("tr").find('td:eq(4)').text());
 			 $("#hosCharge").val($(this).closest("tr").find('td:eq(5)').text());
-		});
+});
 
 

@@ -63,14 +63,9 @@ public class Hospital {
 		 output += "<td>" + hosPhone + "</td>";
 		 output += "<td>" + hosCharge + "</td>";
 		 // buttons
-		 output += "<td><input name=\"btnUpdate\" "
-		 		+ "type=\"button\" value=\"Update\""
-		 		+ " class=\" btnUpdate btn btn-secondary\"></td> "
-		 		+ "<td><form method=\"post\" action=\"hospitals.jsp\"> "
-		 		+ "<input name=\"btnRemove\" type=\"submit\" "
-		 		+ "value=\"Remove\" class=\"btn btn-danger\"> "
-		 		+ "<input name=\"hidHosIDDelete\" type=\"hidden\" "
-		 		+ "value=\"" + hosID + "\">" + "</form></td></tr>";
+		 output +=  "<td><input name='btnUpdate' type='button' value='Update' class='btnUpdate btn btn-secondary'></td> "
+		 		+ "<td><input name='btnRemove' type='button' value='Remove' class='btnRemove btn btn-danger' data-itemid='"
+				 + hosID + "'>" + "</td></tr>"; 
 	  	} 
 		 con.close();
 		 // Complete the html table
@@ -111,12 +106,15 @@ public class Hospital {
 		//execute the statement
 		 preparedStmt.execute();
 		 con.close();
-		 output = "Inserted successfully";
+		 
+		 String newHospitals = showHospitals();
+		 output = "{\"status\":\"success\", \"data\": \"" +
+				 newHospitals + "\"}"; 
 		 }
 		catch (Exception e)
 		 {
-		 output = "Error while inserting";
-		 System.err.println(e.getMessage());
+			output = "{\"status\":\"error\", \"data\": \"Error while inserting the hospital.\"}";
+			System.err.println(e.getMessage()); 
 		 }
 		return output;
 	}
@@ -139,11 +137,14 @@ public class Hospital {
 		 // execute the statement
 		 preparedStmt.execute();
 		 con.close();
-		 output = "Removed successfully";
+		 
+		 String newHospitals = showHospitals();
+		 output = "{\"status\":\"success\", \"data\": \"" +
+				 newHospitals + "\"}"; 
 		 }
 	catch (Exception e)
 	 {
-		 output = "Error while removing hospital.";
+		output = "{\"status\":\"error\", \"data\": \"Error while deleting the hospital.\"}";
 		 System.err.println(e.getMessage());
 	 }
 	return output;
@@ -172,9 +173,11 @@ public class Hospital {
 			preparedStmnt.execute();
 			con.close();
 			
-			output="Updated Successfully";
+			 String newHospitals = showHospitals();
+			 output = "{\"status\":\"success\", \"data\": \"" +
+					 newHospitals + "\"}"; 
 		}catch(Exception e) {
-			output="error while updating the hospital.";
+			output = "{\"status\":\"error\", \"data\": \"Error while updating the hospital.\"}";
 			System.err.println(e.getMessage());
 		}
 		
